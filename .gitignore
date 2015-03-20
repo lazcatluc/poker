@@ -43,3 +43,4 @@ local.properties
 /metamodel
 # JMeter
 jmeter.log
+*.jmx.log
