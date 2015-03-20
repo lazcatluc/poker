@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="2.4" jmeter="2.9 r1437961">
+<jmeterTestPlan version="1.2" properties="2.8" jmeter="2.13 r1665067">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -30,8 +30,8 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">localhost</stringProp>
-          <stringProp name="HTTPSampler.port">8080</stringProp>
+          <stringProp name="HTTPSampler.domain">${__property(HOST)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__property(PORT)}</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
@@ -62,7 +62,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="1219098554">&lt;tiitle&gt;.*?&lt;/title&gt;</stringProp>
+              <stringProp name="87412147">&lt;title&gt;.*?&lt;/title&gt;</stringProp>
               <stringProp name="-1787080698">&lt;body&gt;.*?&lt;/body&gt;</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
@@ -107,6 +107,7 @@
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
               <bytes>true</bytes>
+              <threadCounts>true</threadCounts>
             </value>
           </objProp>
           <stringProp name="filename"></stringProp>
@@ -139,6 +140,7 @@
               <saveAssertionResultsFailureMessage>false</saveAssertionResultsFailureMessage>
               <assertionsResultsToSave>0</assertionsResultsToSave>
               <bytes>true</bytes>
+              <threadCounts>true</threadCounts>
             </value>
           </objProp>
           <stringProp name="filename"></stringProp>
