@@ -46,4 +46,4 @@ local.properties
 
 jmeter.log
 
-#*.jmx.log
+*.jmx.log
