@@ -30,13 +30,13 @@
           <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="User Defined Variables" enabled="true">
             <collectionProp name="Arguments.arguments"/>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${__property(HOST)}</stringProp>
-          <stringProp name="HTTPSampler.port">${__property(PORT)}</stringProp>
+          <stringProp name="HTTPSampler.domain">${__property(HOST,host,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__property(PORT,port,8080)}</stringProp>
           <stringProp name="HTTPSampler.connect_timeout"></stringProp>
           <stringProp name="HTTPSampler.response_timeout"></stringProp>
           <stringProp name="HTTPSampler.protocol"></stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
-          <stringProp name="HTTPSampler.path">/poker</stringProp>
+          <stringProp name="HTTPSampler.path">/${__property(NAME,name,poker)}</stringProp>
           <stringProp name="HTTPSampler.concurrentPool">4</stringProp>
         </ConfigTestElement>
         <hashTree/>
@@ -62,7 +62,7 @@
         <hashTree>
           <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Assertion" enabled="true">
             <collectionProp name="Asserion.test_strings">
-              <stringProp name="87412147">&lt;title&gt;.*?&lt;/title&gt;</stringProp>
+              <stringProp name="1219098554">&lt;title&gt;.*?&lt;/title&gt;</stringProp>
               <stringProp name="-1787080698">&lt;body&gt;.*?&lt;/body&gt;</stringProp>
             </collectionProp>
             <stringProp name="Assertion.test_field">Assertion.response_data</stringProp>
