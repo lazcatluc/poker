@@ -15,11 +15,11 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.jboss.spec</groupId>
-            <artifactId>jboss-javaee-all-6.0</artifactId>
-            <version>3.0.2.Final</version>
-            <scope>provided</scope>
-        </dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
+			<version>7.0</version>
+			<scope>provided</scope>
+		</dependency>
 
         <dependency>
             <groupId>junit</groupId>
@@ -46,9 +46,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <compilerArguments>
-                        <endorseddirs>${endorsed.dir}</endorseddirs>
-                    </compilerArguments>
                 </configuration>
             </plugin>
             <plugin>
