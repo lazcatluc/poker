@@ -41,6 +41,9 @@ local.properties
 # TeXlipse plugin
 .texlipse
 /metamodel
+
 # JMeter
+
 jmeter.log
-*.jmx.log
+
+#*.jmx.log
