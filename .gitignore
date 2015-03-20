@@ -47,3 +47,7 @@ local.properties
 jmeter.log
 
 *.jmx.log
+
+# Idea
+.idea/
+poker.iml
