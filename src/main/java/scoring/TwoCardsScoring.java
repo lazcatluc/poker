@@ -20,7 +20,7 @@ public class TwoCardsScoring implements Scoring {
                         .filter(winner::equals)
                         .map(PlayerHand::getPlayer)
                         .collect(Collectors.toList());
-
+        
         return new ResultImpl(winners);
     }
 

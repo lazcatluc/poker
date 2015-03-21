@@ -53,8 +53,15 @@
 		</h:form>
 		
 		Pot: #{table.pot}
+
 		<br />
 		Money: #{player.money}
+
+
+		<div class="winner">
+			<h:outputLabel value="Winner" rendered="#{player.winner}"/>
+			<h:outputLabel value="Looser" rendered="#{not player.winner}"/>
+		</div>
 
 	</h:body>
 </ui:composition>

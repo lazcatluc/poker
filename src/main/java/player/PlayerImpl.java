@@ -33,6 +33,16 @@ public class PlayerImpl implements Player, Serializable {
         return hand;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+    	return obj instanceof Player && name.equals(((Player) obj).getName());
+    }
+    
+    @Override
+    public String toString() {
+    	return "Player :" + name + " / cards : " + hand;
+    }
+    
     public void increaseAmount(int amount){
     	this.money += amount;
     }
@@ -51,3 +61,4 @@ public class PlayerImpl implements Player, Serializable {
 	}
 	
 }
+
