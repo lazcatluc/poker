@@ -1,6 +1,9 @@
 package cards;
 
-public class CardImpl implements Card {
+import java.io.Serializable;
+
+public class CardImpl implements Card, Serializable {
+    private static final long serialVersionUID = 347670127999292367L;
     private final Rank rank;
     private final Suit suit;
 
