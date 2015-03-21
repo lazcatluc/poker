@@ -49,9 +49,19 @@
 			<h:inputText value="#{player.amount}"></h:inputText>
 			<h:commandButton value="Bet" action="#{player.bet}" />
 			<h:commandButton value="Fold" action="#{player.fold}" />
+			<h:commandButton value="End game" action="#{table.endGame}" />
 		</h:form>
 		
 		Pot: #{table.pot}
+
+		<br />
+		Money: #{player.money}
+
+
+		<div class="winner">
+			<h:outputLabel value="Winner" rendered="#{player.winner}"/>
+			<h:outputLabel value="Looser" rendered="#{not player.winner}"/>
+		</div>
 
 	</h:body>
 </ui:composition>

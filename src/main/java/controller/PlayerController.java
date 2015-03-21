@@ -7,14 +7,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
-
-import betting.Bet;
-import betting.BetImpl;
-import cards.Card;
-import cards.Deck;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
+import betting.Bet;
+import betting.BetImpl;
 import cards.Card;
 import cards.Deck;
 
@@ -37,6 +34,10 @@ public class PlayerController implements Serializable{
     
 	public String getError() {
 		return error;
+	}
+	
+	public Integer getMoney(){
+		return player.getMoney();
 	}
 	
 	
@@ -93,7 +94,9 @@ public class PlayerController implements Serializable{
     }
 
     public void bet(){
-		Bet bet = new BetImpl(Integer.parseInt(amount));
+		int amountInt = Integer.parseInt(amount);
+		Bet bet = new BetImpl(amountInt);
+		player.decreaseAmount(amountInt);
 		table.takeBet(player.getName(),bet);
 	}
     
