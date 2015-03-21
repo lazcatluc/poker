@@ -91,13 +91,13 @@ public class PlayerControllerTest {
 		playerController.setName("testName");
 		playerController.setTable(table);
 
-		System.out.println("error:" + playerController.getError());
+		//System.out.println("error:" + playerController.getError());
 
 		assertNull(playerController.getError());
 		playerController.createPlayer();
 		assertNotNull(playerController.getError());
 
-		System.out.println("error:" + playerController.getError());
+		//System.out.println("error:" + playerController.getError());
 
 	}
 
@@ -139,6 +139,23 @@ public class PlayerControllerTest {
 		Player secondPlayer = pc2.getPlayer();
 
 		assertTrue(table.isOwner(secondPlayer));
+	}
+	
+	@Test
+	public void checkTablePotMatchesPlayersBet() throws Exception {
+
+		playerController.setAmount("10");
+		playerController.bet();
+		
+		PlayerController playerController2 = new PlayerController();
+		playerController2.setName("player2");
+		playerController2.setTable(table);
+		playerController2.createPlayer();
+		playerController2.setAmount("20");
+		playerController2.bet();
+		
+		assertEquals(30, table.getPot().intValue());
+		
 	}
 
 }
