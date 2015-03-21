@@ -13,12 +13,12 @@ public class DeckImpl implements Deck {
                 cards.add(new CardImpl(rank, suit));
             }
         }
+        Collections.shuffle(cards);
     }
 
     @Override
     public Card drawCard() {
-        Collections.shuffle(cards);
-        if (drawn == 51) {
+        if (drawn == 52) {
             return null;
         }
         return cards.get(drawn++);
