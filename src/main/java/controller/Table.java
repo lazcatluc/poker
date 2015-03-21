@@ -5,16 +5,18 @@ import game.Owner;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 
+import betting.Bet;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidator;
-import player.PlayerValidatorImpl;
 import cards.Deck;
 
 @ManagedBean(name="table")
@@ -25,6 +27,7 @@ public class Table implements Owner, Serializable {
 
 	private Player owner;
 	private List<Player> players = new ArrayList<>();
+	private Map<String,Bet> bets = new HashMap<>();
 	
 	@Inject
 	private PlayerValidator validator; 
@@ -76,6 +79,18 @@ public class Table implements Owner, Serializable {
 		}else{
 			owner = players.get(0);
 		}
+	}
+
+	public void takeBet(String name, Bet bet) {
+		bets.put(name, bet);
+	}
+	
+	public Integer getPot(){
+		Integer pot = 0;
+		for(Map.Entry<String, Bet> bet : bets.entrySet()){
+			pot+=bet.getValue().getAmount();
+		}
+		return pot;
 	}
 	
 }

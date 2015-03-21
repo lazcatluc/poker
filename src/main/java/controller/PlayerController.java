@@ -8,6 +8,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 
+import betting.Bet;
+import betting.BetImpl;
 import cards.Card;
 import cards.Deck;
 import player.InvalidPlayerException;
@@ -24,6 +26,7 @@ public class PlayerController implements Serializable{
 	private Table table; 
 
     private String name;
+    private String amount;
 
     private Player player;
     
@@ -77,10 +80,17 @@ public class PlayerController implements Serializable{
         return player;
     }
 
+    public void bet(){
+		Bet bet = new BetImpl(Integer.parseInt(amount));
+		table.takeBet(player.getName(),bet);
+	}
+    
 	public String fold() {
 		table.fold(player);
 		player = null;
 		name = null;
 		return "index";
 	}
+	
+	
 }
