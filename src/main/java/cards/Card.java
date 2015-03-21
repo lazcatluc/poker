@@ -1,6 +1,6 @@
 package cards;
 
-public interface Card {
+public interface Card extends Comparable<Card> {
     public Rank getRank();
     public Suit getSuit();
 }
