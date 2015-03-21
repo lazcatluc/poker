@@ -3,10 +3,10 @@ package controller;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+
 
 import betting.Bet;
 import betting.BetImpl;
@@ -15,6 +15,8 @@ import cards.Deck;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
+import cards.Card;
+import cards.Deck;
 
 @ManagedBean(name = "player")
 @SessionScoped
@@ -92,5 +94,8 @@ public class PlayerController implements Serializable{
 		return "index";
 	}
 	
-	
+	public boolean isWinner() {
+		return table.isWinner(player);
+	}
+
 }
