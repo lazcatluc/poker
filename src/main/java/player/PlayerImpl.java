@@ -31,4 +31,14 @@ public class PlayerImpl implements Player, Serializable {
     public List<Card> getHand() {
         return hand;
     }
+    
+    @Override
+    public boolean equals(Object obj) {
+    	return obj instanceof Player && name.equals(((Player) obj).getName());
+    }
+    
+    @Override
+    public String toString() {
+    	return "Player :" + name + " / cards : " + hand;
+    }
 }

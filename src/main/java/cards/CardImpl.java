@@ -46,4 +46,9 @@ public class CardImpl implements Card, Serializable {
     public int compareTo(Card o) {
         return getRank().compareTo(o.getRank());
     }
+    
+    @Override
+    public String toString() {
+    	return getRank() + "." + getSuit();
+    }
 }
