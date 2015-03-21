@@ -58,7 +58,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     private Card getMax() {
-        if (card1.compareTo(card2) == 1) {
+        if (card1.compareTo(card2) > 0) {
             return card1;
         } else {
             return card2;
@@ -66,7 +66,7 @@ public class Hand implements Comparable<Hand> {
     }
 
     private Card getMin() {
-        if (card1.compareTo(card2) == 1) {
+        if (card1.compareTo(card2) > 0) {
             return card2;
         } else {
             return card1;
