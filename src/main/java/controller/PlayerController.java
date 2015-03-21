@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -21,11 +22,16 @@ public class PlayerController implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@ManagedProperty("#{table}")
-	private Table table;
+	private Table table; 
 
     private String name;
 
     private Player player;
+    
+    @PostConstruct
+    public void init() {
+    	table.registerPlayer(player);
+    }
 
     public String createPlayer() {
         if (player == null) {
