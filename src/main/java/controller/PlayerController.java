@@ -66,7 +66,10 @@ public class PlayerController implements Serializable{
         return player;
     }
 
-	public void fold() {
+	public String fold() {
 		table.fold(player);
+		player = null;
+		name = null;
+		return "index";
 	}
 }
