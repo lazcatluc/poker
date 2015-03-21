@@ -16,6 +16,13 @@
                 wsocket.send("teeeeeeeeeest");
             });
 
+            function onMessageReceived(evt) {
+                console.log(evt)
+                alert(evt.data);
+            }
+
+            wsocket.onmessage = onMessageReceived;
+
             function waitForSocketConnection(socket, callback){
                 setTimeout(
                     function(){

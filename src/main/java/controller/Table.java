@@ -4,6 +4,7 @@ import game.Game;
 import game.Owner;
 
 import java.awt.*;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,12 +55,22 @@ public class Table implements Owner, Serializable {
         System.out.println("onOpen: " + session.getId());
         sessions.add(session);
         System.out.println("onOpen: Notification list size: " + sessions.size());
+
+        try{
+            session.getBasicRemote().sendText("Hello user!");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @OnMessage
     public void messageReceiver(String message) {
         System.out.println("Received message:" + message);
     }
+
+
+
+
 
 
     public Deck getDeck() {
