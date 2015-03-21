@@ -1,28 +1,30 @@
 package controller;
 
+import player.InvalidPlayerException;
 import player.Player;
-import player.PlayerValidator;
+import player.PlayerImpl;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(HierarchicalContextRunner.class)
 public class TableTest {
 	
-	private Table table;
+	Table table;
 	
 	@Before
-	public void setUp() throws Exception {
+	public void setup(){
 		table = new Table();
-		PlayerValidator validator = mock(PlayerValidator.class);
-		table.setValidator(validator);
 	}
 	
 	@Test
 	public void initiallyTableHasNoOwner() throws Exception {
-		assertFalse(new Table().isOwner(mock(Player.class)));
+		assertFalse(table.isOwner(mock(Player.class)));
 	}
 	
 	@Test
@@ -44,4 +46,31 @@ public class TableTest {
 		
 		assertFalse(table.isOwner(second));
 	}
+	
+	@Test
+	public void numberOfPlayersIsZeroAtStart() throws Exception {
+		int numberOfPlayers = table.getNumberOfPlayers();
+		
+		assertEquals(0,numberOfPlayers);
+	}
+	
+	public class TableWithOnePlayer{
+		
+		Player player;
+		
+		@Before
+		public void setup() throws InvalidPlayerException{
+			player = new PlayerImpl("player");
+			table.registerPlayer(player);
+		}
+		
+		@Test
+		public void numberOfPlayersIsOne() throws Exception {
+			int numberOfPlayers = table.getNumberOfPlayers();
+			
+			assertEquals(1,numberOfPlayers);
+		}
+	}
+	
+	
 }

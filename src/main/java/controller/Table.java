@@ -64,5 +64,18 @@ public class Table implements Owner, Serializable {
 	public Game startGame() {
 		return Game.FINISHED;
 	}
+
+	public int getNumberOfPlayers() {
+		return players.size();
+	}
+
+	public void fold(Player player) {
+		players.remove(player);
+		if(players.isEmpty()){
+			owner = null;
+		}else{
+			owner = players.get(0);
+		}
+	}
 	
 }
