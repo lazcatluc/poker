@@ -9,7 +9,7 @@ public class BetImpl implements Bet, Serializable {
 	private int amount;
 	
 	public BetImpl(int amount) {
-		amount = amount>=0 ? amount : 0;
+		this.amount = amount>=0 ? amount : 0;
 	}
 
 	@Override

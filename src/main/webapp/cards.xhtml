@@ -44,10 +44,14 @@
             </div>
 
         </ui:repeat>
-        
-         <h:form>
-            <h:commandButton value="Fold" action="#{player.fold}" />
-        </h:form>
 
-    </h:body>
+		<h:form>
+			<h:inputText value="#{player.amount}"></h:inputText>
+			<h:commandButton value="Bet" action="#{player.bet}" />
+			<h:commandButton value="Fold" action="#{player.fold}" />
+		</h:form>
+		
+		Pot: #{table.pot}
+
+	</h:body>
 </ui:composition>
