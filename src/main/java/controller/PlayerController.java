@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import cards.Card;
 import cards.Deck;
+import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
 
@@ -28,18 +29,28 @@ public class PlayerController implements Serializable{
 
     private Player player;
     
-    @PostConstruct
-    public void init() {
-    	table.registerPlayer(player);
-    }
+
+	private String error;
+    
+	public String getError() {
+		return error;
+	}
+	
+	
 
     public String createPlayer() {
         if (player == null) {
             player = new PlayerImpl(getName());
+            try {
+				table.registerPlayer(player);
+			} catch (InvalidPlayerException e) {
+				error = "Name already taken";
+				return "index";
+			}
         }
         return "cards";
     }
-
+    
     public String getName() {
         return name;
     }
