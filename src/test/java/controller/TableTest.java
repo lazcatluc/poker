@@ -1,5 +1,6 @@
 package controller;
 
+import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
 
@@ -58,7 +59,7 @@ public class TableTest {
 		Player player;
 		
 		@Before
-		public void setup(){
+		public void setup() throws InvalidPlayerException{
 			player = new PlayerImpl("player");
 			table.registerPlayer(player);
 		}
@@ -70,4 +71,6 @@ public class TableTest {
 			assertEquals(1,numberOfPlayers);
 		}
 	}
+	
+	
 }

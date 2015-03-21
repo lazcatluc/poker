@@ -17,7 +17,8 @@
             <h:inputText value="#{player.name}" />
             <h:commandButton value="Submit" action="#{player.createPlayer}" />
         </h:form>
-
+        
+        #{player.error}
 
     </h:body>
 </ui:composition>
