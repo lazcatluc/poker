@@ -8,27 +8,41 @@
         <link rel="stylesheet" href="https://rawgit.com/donpark/scalable-css-playing-cards/master/dist/playingcards.css" />
     </h:head>
     <h:body>
-        <h:outputText value="#{msg.welcomeMessage}" />
 
-        <div id="cards" style="font-size: 5px">
-            <div class="card" id="view53">
-                <div class="card-ace club">
-                    <div class="corner top">
-                        <span class="number">A</span>
-                        <span>♣</span>
-                    </div>
-                    <span class="suit middle_center">♣</span>
-                    <div class="corner bottom">
-                        <span class="number">A</span>
-                        <span>♣</span>
+            <ui:repeat var="card" value="#{cards.playerCards}" varStatus="status">
+
+
+                <div class="card">
+                    <div class="card-ace club">
+                        <div class="corner top">
+                            <span class="number">
+                                <h:outputText value="#{card.rank}" escape="false">
+                                    <f:converter converterId="converters.RankToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                            <span>
+                                <h:outputText value="#{card.suit}" escape="false">
+                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                        </div>
+
+                        <div class="corner bottom">
+                            <span class="number">
+                                <h:outputText value="#{card.rank}" escape="false">
+                                    <f:converter converterId="converters.RankToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                            <span>
+                                <h:outputText value="#{card.suit}" escape="false">
+                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <ui:include src="/templates/card-back.xhtml" />
+            </ui:repeat>
 
-            <ui:include src="/templates/card-two.xhtml" />
-
-        </div>
     </h:body>
 </ui:composition>
