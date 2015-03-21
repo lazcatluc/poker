@@ -30,6 +30,7 @@ public class Table implements Owner, Serializable {
 	private Player owner;
 	private List<Player> players = new ArrayList<>();
 	private Map<String, List<Bet>> bets = new HashMap<>();
+    private int pot = 0;
 	
 	@Inject
 	private PlayerValidator validator; 
@@ -90,15 +91,11 @@ public class Table implements Owner, Serializable {
         List<Bet> playerBets = bets.getOrDefault(name, new ArrayList<Bet>());
         playerBets.add(bet);
 		bets.put(name, playerBets);
+
+        pot += bet.getAmount();
 	}
 	
 	public Integer getPot(){
-		Integer pot = 0;
-		for(Map.Entry<String, List<Bet>> playerBets : bets.entrySet()){
-			for (Bet bet : playerBets.getValue()) {
-                pot += bet.getAmount();
-            }
-		}
 		return pot;
 	}
 
