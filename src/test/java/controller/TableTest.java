@@ -1,8 +1,10 @@
 package controller;
 
+
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
+import player.PlayerValidatorImpl;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -20,6 +22,7 @@ public class TableTest {
 	@Before
 	public void setup(){
 		table = new Table();
+		table.setValidator(new PlayerValidatorImpl());
 	}
 	
 	@Test
@@ -39,7 +42,9 @@ public class TableTest {
 	@Test
 	public void afterRegisteringTheSecondPlayerDoesNotBecomeOwner() throws Exception {
 		Player first = mock(Player.class);
+		when(first.getName()).thenReturn("Player1");
 		Player second = mock(Player.class);
+		when(first.getName()).thenReturn("Player2");
 		
 		table.registerPlayer(first);
 		table.registerPlayer(second);
