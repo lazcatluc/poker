@@ -25,11 +25,12 @@ import cards.Deck;
 @ApplicationScoped
 public class Table implements Owner, Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2L;
 
 	private Player owner;
 	private List<Player> players = new ArrayList<>();
-	private Map<String,Bet> bets = new HashMap<>();
+	private Map<String, List<Bet>> bets = new HashMap<>();
+    private int pot = 0;
 	
 	@Inject
 	private PlayerValidator validator; 
@@ -87,14 +88,14 @@ public class Table implements Owner, Serializable {
 	}
 
 	public void takeBet(String name, Bet bet) {
-		bets.put(name, bet);
+        List<Bet> playerBets = bets.getOrDefault(name, new ArrayList<Bet>());
+        playerBets.add(bet);
+		bets.put(name, playerBets);
+
+        pot += bet.getAmount();
 	}
 	
 	public Integer getPot(){
-		Integer pot = 0;
-		for(Map.Entry<String, Bet> bet : bets.entrySet()){
-			pot+=bet.getValue().getAmount();
-		}
 		return pot;
 	}
 
