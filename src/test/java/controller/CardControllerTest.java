@@ -5,6 +5,7 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,6 +14,7 @@ import cards.CardImpl;
 import cards.Deck;
 import cards.Rank;
 import cards.Suit;
+import player.Player;
 
 public class CardControllerTest {
 
@@ -60,5 +62,17 @@ public class CardControllerTest {
 		
 		Assertions.assertThat(firstDraw).isEqualTo(secondDraw);
 	}
+
+    @Test
+    public void shouldNotCreatePlayerTheSecondTime() {
+        playerController.setName("testName");
+        playerController.createPlayer();
+        Player player1 = playerController.getPlayer();
+
+        playerController.createPlayer();
+        Player player2 = playerController.getPlayer();
+
+        Assert.assertTrue(player1 == player2);
+    }
 
 }

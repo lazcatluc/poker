@@ -28,7 +28,9 @@ public class PlayerController implements Serializable{
     private Player player;
 
     public String createPlayer() {
-        player = new PlayerImpl(getName());
+        if (player == null) {
+            player = new PlayerImpl(getName());
+        }
         return "cards";
     }
 
