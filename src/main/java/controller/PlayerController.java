@@ -20,8 +20,6 @@ public class PlayerController implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
-	private List<Card> cards;
-
 	@ManagedProperty("#{table}")
 	private Table table;
 
@@ -31,7 +29,7 @@ public class PlayerController implements Serializable{
 
     public String createPlayer() {
         player = new PlayerImpl(getName());
-        return "";
+        return "cards";
     }
 
     public String getName() {
@@ -51,11 +49,14 @@ public class PlayerController implements Serializable{
 	}
 	
 	public List<Card> getCards() {
-		if (cards == null) {
-			cards = new ArrayList<>();
-			cards.add(getDeck().drawCard());
-			cards.add(getDeck().drawCard());
+		if (player.getHand().size() == 0) {
+			player.dealCard(getDeck().drawCard());
+            player.dealCard(getDeck().drawCard());
 		}
-		return cards;
+		return player.getHand();
 	}
+
+    public Player getPlayer() {
+        return player;
+    }
 }
