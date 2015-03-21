@@ -2,7 +2,6 @@ package cards;
 
 public enum Rank {
     ACE,
-    ONE,
     TWO,
     THREE,
     FOUR,
