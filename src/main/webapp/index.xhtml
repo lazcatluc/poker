@@ -9,16 +9,13 @@
     </h:head>
     <h:body>
 
-
-        Name: #{player.name}
-
         <h:form>
             <h:outputLabel value="Enter your name: " />
             <h:inputText value="#{player.name}" />
             <h:commandButton value="Submit" action="#{player.createPlayer}" />
         </h:form>
         
-        #{player.error}
+        <span style="color: red">#{player.error}</span>
 
     </h:body>
 </ui:composition>
