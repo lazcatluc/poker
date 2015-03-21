@@ -7,9 +7,12 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
+import javax.inject.Inject;
 
 import cards.Card;
 import cards.Deck;
+import player.Player;
+import player.PlayerImpl;
 
 @ManagedBean(name = "player")
 @SessionScoped
@@ -22,7 +25,24 @@ public class PlayerController implements Serializable{
 	@ManagedProperty("#{table}")
 	private Table table;
 
-	public Deck getDeck() {
+    private String name;
+
+    private Player player;
+
+    public String createPlayer() {
+        player = new PlayerImpl(getName());
+        return "";
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Deck getDeck() {
 		return table.getDeck();
 	}
 

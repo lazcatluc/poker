@@ -9,8 +9,17 @@
     </h:head>
     <h:body>
 
-            <ui:repeat var="card" value="#{player.cards}" varStatus="status">
 
+        Name: #{player.name}
+
+        <h:form>
+            <h:outputLabel value="Enter your name: " />
+            <h:inputText value="#{player.name}" />
+            <h:commandButton value="Submit" action="#{player.createPlayer}" />
+        </h:form>
+
+
+            <ui:repeat var="card" value="#{player.cards}" varStatus="status">
 
                 <div class="card">
                     <div class="card-ace #{card.suit}">
