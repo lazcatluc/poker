@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title>#{msg.title}</title>
+        <link rel="stylesheet" href="css/cards.css" />
+    </h:head>
+    <h:body>
+
+        Name: #{player.name}
+
+        <ui:repeat var="card" value="#{player.cards}" varStatus="status">
+
+            <div class="card">
+                <div class="card-ace #{card.suit}">
+                    <div class="corner top">
+                            <span class="number">
+                                <h:outputText value="#{card.rank}" escape="false">
+                                    <f:converter converterId="converters.RankToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                            <span>
+                                <h:outputText value="#{card.suit}" escape="false">
+                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                    </div>
+
+                    <div class="corner bottom">
+                            <span class="number">
+                                <h:outputText value="#{card.rank}" escape="false">
+                                    <f:converter converterId="converters.RankToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                            <span>
+                                <h:outputText value="#{card.suit}" escape="false">
+                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
+                                </h:outputText>
+                            </span>
+                    </div>
+                </div>
+            </div>
+
+        </ui:repeat>
+
+    </h:body>
+</ui:composition>
