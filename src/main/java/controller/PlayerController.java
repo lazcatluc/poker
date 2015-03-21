@@ -36,6 +36,10 @@ public class PlayerController implements Serializable{
 		return error;
 	}
 	
+	public Integer getMoney(){
+		return player.getMoney();
+	}
+	
 	
 
     public String createPlayer() {
@@ -90,7 +94,9 @@ public class PlayerController implements Serializable{
     }
 
     public void bet(){
-		Bet bet = new BetImpl(Integer.parseInt(amount));
+		int amountInt = Integer.parseInt(amount);
+		Bet bet = new BetImpl(amountInt);
+		player.decreaseAmount(amountInt);
 		table.takeBet(player.getName(),bet);
 	}
     

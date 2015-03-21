@@ -21,6 +21,19 @@ public interface Player {
 		public List<Card> getHand() {
 			return Collections.emptyList();
 		}
+
+		@Override
+		public void increaseAmount(int amount) {
+		}
+
+		@Override
+		public void decreaseAmount(int amountInt) {
+		}
+
+		@Override
+		public Integer getMoney() {
+			return Integer.MIN_VALUE;
+		}
 	};
 
 	public void dealCard(Card card);
@@ -28,4 +41,11 @@ public interface Player {
 	public String getName();
 
     List<Card> getHand();
+    
+    void increaseAmount(int amount);
+
+	void decreaseAmount(int amountInt);
+	
+	Integer getMoney();
 }
+

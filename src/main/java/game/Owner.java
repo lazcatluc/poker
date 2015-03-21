@@ -6,8 +6,16 @@ public interface Owner {
 		public Game startGame() {
 			return Game.FINISHED;
 		}
+		
+		@Override
+		public Game endGame() {
+			return Game.FINISHED;
+		}
+		
 	};
 
 	Game startGame();
+	
+	Game endGame();
 	
 }
