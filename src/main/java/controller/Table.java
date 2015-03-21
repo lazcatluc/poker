@@ -1,6 +1,7 @@
 package controller;
 
 import game.Game;
+import game.GameBuilder;
 import game.Owner;
 
 import java.io.Serializable;
@@ -40,6 +41,10 @@ public class Table implements Owner, Serializable {
 	@Inject
 	private Scoring scoring;
 	
+	@Inject
+	private GameBuilder gameBuilder;
+	private Game game = Game.FINISHED;
+	
 	public Deck getDeck() {
 		return deck;
 	}
@@ -69,8 +74,9 @@ public class Table implements Owner, Serializable {
 	}
 
 	@Override
-	public Game startGame() {
-		return Game.FINISHED;
+	public synchronized Game startGame() {
+		setGame(getGameBuilder().withPlayers(players).build());
+		return getGame();
 	}
 
 	public int getNumberOfPlayers() {
@@ -79,6 +85,7 @@ public class Table implements Owner, Serializable {
 
 	public void fold(Player player) {
 		players.remove(player);
+		game.removePlayer(player);
 		if(players.isEmpty()){
 			owner = null;
 		}else{
@@ -104,6 +111,22 @@ public class Table implements Owner, Serializable {
 
 	public boolean isWinner(Player player) {
 		return scoring.getResult(players).isWinner(player);
+	}
+
+	public GameBuilder getGameBuilder() {
+		return gameBuilder;
+	}
+
+	public void setGameBuilder(GameBuilder gameBuilder) {
+		this.gameBuilder = gameBuilder;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
 	}
 	
 }

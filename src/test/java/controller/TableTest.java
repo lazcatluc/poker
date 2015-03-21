@@ -1,6 +1,11 @@
 package controller;
 
 
+import java.util.Collection;
+
+import game.Game;
+import game.GameBuilder;
+import game.GameBuilderImpl;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
@@ -23,6 +28,7 @@ public class TableTest {
 	public void setup(){
 		table = new Table();
 		table.setValidator(new PlayerValidatorImpl());
+		table.setGameBuilder(mock(GameBuilder.class));
 	}
 	
 	@Test
@@ -57,6 +63,24 @@ public class TableTest {
 		int numberOfPlayers = table.getNumberOfPlayers();
 		
 		assertEquals(0,numberOfPlayers);
+	}
+	
+	@Test
+	public void whenPlayerFoldsPlayerIsRemovedFromGame() throws Exception {
+		Player first = mock(Player.class);
+		when(first.getName()).thenReturn("Player1");
+		Player second = mock(Player.class);
+		when(first.getName()).thenReturn("Player2");
+		Game game = mock(Game.class);
+		when(table.getGameBuilder().withPlayers(any(Collection.class))).thenReturn(table.getGameBuilder());
+		when(table.getGameBuilder().build()).thenReturn(game);
+		
+		table.registerPlayer(first);
+		table.registerPlayer(second);
+		table.startGame();
+		table.fold(first);
+		
+		verify(game, times(1)).removePlayer(first);
 	}
 	
 	public class TableWithOnePlayer{
