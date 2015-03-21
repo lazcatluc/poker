@@ -10,7 +10,7 @@
         <script type="text/javascript">
 
 
-            var host = "ws://localhost:8080/poker/echo";
+            var host = "ws://"+window.location.host+"/poker/echo";
             var wsocket = new WebSocket(host);
             waitForSocketConnection(wsocket, function() {
                 wsocket.send("teeeeeeeeeest");
