@@ -40,9 +40,6 @@ public class PlayerValidatorImplTest {
 			e.printStackTrace();
 		}
 		
-		assertEquals(4, validator.getNameList().size());
-		
-		
 		p=new PlayerImpl("Ion");
 		try {
 			validator.validatePlayer(p);

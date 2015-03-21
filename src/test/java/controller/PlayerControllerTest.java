@@ -5,7 +5,9 @@ import static org.mockito.Mockito.*;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Assert;
+
+import static org.junit.Assert.*;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +17,9 @@ import cards.Deck;
 import cards.Rank;
 import cards.Suit;
 import player.Player;
+import player.PlayerValidatorImpl;
 
-public class CardControllerTests {
+public class PlayerControllerTest {
 
 	private Deck deck;
 	
@@ -24,6 +27,8 @@ public class CardControllerTests {
 	
 	private Card card1;
 	private Card card2;
+
+	private Table table;
 	
 	@Before
 	public void setup(){
@@ -34,12 +39,18 @@ public class CardControllerTests {
 		when(deck.drawCard()).thenReturn(card1, card2);
 
         playerController = new PlayerController();
+        
+        
+        table = new Table();
+        table.setValidator(new PlayerValidatorImpl());
+		table.setDeck(deck);
+		playerController.setTable(table);
+		
+		
         playerController.setName("testName");
         playerController.createPlayer();
 
-        Table table = new Table();
-		table.setDeck(deck);
-		playerController.setTable(table);
+        
 	}
 	
 	@Test
@@ -72,7 +83,23 @@ public class CardControllerTests {
         playerController.createPlayer();
         Player player2 = playerController.getPlayer();
 
-        Assert.assertTrue(player1 == player2);
+        assertTrue(player1 == player2);
+    }
+    
+    @Test
+    public void crashPlayerValidator() {    	
+    	PlayerController playerController = new PlayerController();
+    	playerController.setName("testName");
+    	playerController.setTable(table);
+    	
+    	System.out.println("error:"+playerController.getError());
+    	
+    	assertNull(playerController.getError());
+    	playerController.createPlayer();
+    	assertNotNull(playerController.getError());
+    	
+    	System.out.println("error:"+playerController.getError());
+    	
     }
 
 }
