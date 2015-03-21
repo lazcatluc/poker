@@ -15,6 +15,7 @@ import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidator;
 import player.PlayerValidatorImpl;
+import scoring.Scoring;
 import cards.Deck;
 
 @ManagedBean(name="table")
@@ -31,6 +32,9 @@ public class Table implements Owner, Serializable {
 	
 	@Inject
 	private Deck deck;
+
+	@Inject
+	private Scoring scoring;
 	
 	public Deck getDeck() {
 		return deck;
@@ -76,6 +80,14 @@ public class Table implements Owner, Serializable {
 		}else{
 			owner = players.get(0);
 		}
+	}
+
+	public void setScoring(Scoring scoring) {
+		this.scoring = scoring;
+	}
+
+	public boolean isWinner(Player player) {
+		return scoring.getResult(players).isWinner(player);
 	}
 	
 }
