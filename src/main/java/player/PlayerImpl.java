@@ -27,4 +27,8 @@ public class PlayerImpl implements Player, Serializable {
 		return name;
 	}
 
+    @Override
+    public List<Card> getHand() {
+        return hand;
+    }
 }

@@ -5,44 +5,19 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:head>
         <title>#{msg.title}</title>
-        <link rel="stylesheet" href="https://rawgit.com/donpark/scalable-css-playing-cards/master/dist/playingcards.css" />
+        <link rel="stylesheet" href="css/cards.css" />
     </h:head>
     <h:body>
 
-            <ui:repeat var="card" value="#{player.cards}" varStatus="status">
 
+        Name: #{player.name}
 
-                <div class="card">
-                    <div class="card-ace club">
-                        <div class="corner top">
-                            <span class="number">
-                                <h:outputText value="#{card.rank}" escape="false">
-                                    <f:converter converterId="converters.RankToHtmlSymbol" />
-                                </h:outputText>
-                            </span>
-                            <span>
-                                <h:outputText value="#{card.suit}" escape="false">
-                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
-                                </h:outputText>
-                            </span>
-                        </div>
+        <h:form>
+            <h:outputLabel value="Enter your name: " />
+            <h:inputText value="#{player.name}" />
+            <h:commandButton value="Submit" action="#{player.createPlayer}" />
+        </h:form>
 
-                        <div class="corner bottom">
-                            <span class="number">
-                                <h:outputText value="#{card.rank}" escape="false">
-                                    <f:converter converterId="converters.RankToHtmlSymbol" />
-                                </h:outputText>
-                            </span>
-                            <span>
-                                <h:outputText value="#{card.suit}" escape="false">
-                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
-                                </h:outputText>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-
-            </ui:repeat>
 
     </h:body>
 </ui:composition>

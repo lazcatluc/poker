@@ -1,5 +1,8 @@
 package controller;
 
+import game.Game;
+import game.Owner;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +16,13 @@ import cards.Deck;
 
 @ManagedBean(name="table")
 @ApplicationScoped
-public class Table implements Serializable {
+public class Table implements Owner, Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	private Player owner;
+	private List<Player> players = new ArrayList<>();
+	
 	@Inject
 	private Deck deck;
 	
@@ -26,6 +32,22 @@ public class Table implements Serializable {
 	
 	public void setDeck(Deck deck) {
 		this.deck = deck;
+	}
+	
+	public void registerPlayer(Player player) {
+		if (players.isEmpty()) {
+			owner = player;
+		}
+		players.add(player);
+	}
+	
+	public boolean isOwner(Player player) {
+		return player.equals(owner);
+	}
+
+	@Override
+	public Game startGame() {
+		return Game.FINISHED;
 	}
 	
 }
