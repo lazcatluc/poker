@@ -10,10 +10,12 @@ import javax.inject.Inject;
 import cards.Card;
 import cards.Deck;
 
-@ManagedBean(name="cards")
+@ManagedBean(name = "cards")
 @SessionScoped
 public class CardController {
-	
+
+	private List<Card> cards;
+
 	@Inject
 	private Deck deck;
 
@@ -24,11 +26,13 @@ public class CardController {
 	public void setDeck(Deck deck) {
 		this.deck = deck;
 	}
-	
-	public List<Card> getPlayerCards(){
-		List<Card> cards = new ArrayList<>();
-		cards.add(deck.drawCard());
-		cards.add(deck.drawCard());
+
+	public List<Card> getPlayerCards() {
+		if (cards == null) {
+			cards = new ArrayList<>();
+			cards.add(deck.drawCard());
+			cards.add(deck.drawCard());
+		}
 		return cards;
 	}
 }
