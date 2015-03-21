@@ -54,3 +54,4 @@ poker.iml
 
 
 .classpath
+*.log
