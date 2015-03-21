@@ -2,6 +2,7 @@ package controller;
 
 import static org.mockito.Mockito.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
@@ -20,6 +21,8 @@ import cards.Suit;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidatorImpl;
+import scoring.Scoring;
+import scoring.TwoCardsScoring;
 
 public class PlayerControllerTest {
 
@@ -156,6 +159,34 @@ public class PlayerControllerTest {
 		
 		assertEquals(30, table.getPot().intValue());
 		
+	}
+	
+	@Test
+	public void winningPlayerTakesPot() throws Exception {
+		playerController.setAmount("10");
+		playerController.bet();
+		
+		Player firstPlayer = playerController.getPlayer();
+		firstPlayer.dealCard(new CardImpl(Rank.ACE, Suit.CLUBS));
+		firstPlayer.dealCard(new CardImpl(Rank.ACE, Suit.DIAMONDS));
+		
+		PlayerController playerController2 = new PlayerController();
+		playerController2.setName("player2");
+		playerController2.setTable(table);
+		playerController2.createPlayer();
+		playerController2.setAmount("20");
+		playerController2.bet();
+		
+		Player secondPlayer = playerController2.getPlayer();
+		secondPlayer.dealCard(new CardImpl(Rank.ACE, Suit.HEARTS));
+		secondPlayer.dealCard(new CardImpl(Rank.KING, Suit.CLUBS));
+	        
+		table.setScoring(new TwoCardsScoring());
+		table.endGame();
+		
+		
+		assertEquals(20,playerController.getPlayer().getMoney().intValue());
+		assertEquals(-20,playerController2.getPlayer().getMoney().intValue());
 	}
 
 }
