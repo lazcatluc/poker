@@ -1,21 +1,33 @@
 package controller;
 
 import player.Player;
+import player.PlayerImpl;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import de.bechte.junit.runners.context.HierarchicalContextRunner;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
+@RunWith(HierarchicalContextRunner.class)
 public class TableTest {
+	
+	Table table;
+	
+	@Before
+	public void setup(){
+		table = new Table();
+	}
+	
 	@Test
 	public void initiallyTableHasNoOwner() throws Exception {
-		assertFalse(new Table().isOwner(mock(Player.class)));
+		assertFalse(table.isOwner(mock(Player.class)));
 	}
 	
 	@Test
 	public void afterRegisteringTheFirstPlayerBecomesOwner() throws Exception {
-		Table table = new Table();
 		Player player = mock(Player.class);
 		
 		table.registerPlayer(player);
@@ -25,7 +37,6 @@ public class TableTest {
 	
 	@Test
 	public void afterRegisteringTheSecondPlayerDoesNotBecomeOwner() throws Exception {
-		Table table = new Table();
 		Player first = mock(Player.class);
 		Player second = mock(Player.class);
 		
@@ -33,5 +44,30 @@ public class TableTest {
 		table.registerPlayer(second);
 		
 		assertFalse(table.isOwner(second));
+	}
+	
+	@Test
+	public void numberOfPlayersIsZeroAtStart() throws Exception {
+		int numberOfPlayers = table.getNumberOfPlayers();
+		
+		assertEquals(0,numberOfPlayers);
+	}
+	
+	public class TableWithOnePlayer{
+		
+		Player player;
+		
+		@Before
+		public void setup(){
+			player = new PlayerImpl("player");
+			table.registerPlayer(player);
+		}
+		
+		@Test
+		public void numberOfPlayersIsOne() throws Exception {
+			int numberOfPlayers = table.getNumberOfPlayers();
+			
+			assertEquals(1,numberOfPlayers);
+		}
 	}
 }

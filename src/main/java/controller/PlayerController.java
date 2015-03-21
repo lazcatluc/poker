@@ -1,14 +1,12 @@
 package controller;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.inject.Inject;
 
 import cards.Card;
 import cards.Deck;
@@ -67,4 +65,8 @@ public class PlayerController implements Serializable{
     public Player getPlayer() {
         return player;
     }
+
+	public void fold() {
+		table.fold(player);
+	}
 }
