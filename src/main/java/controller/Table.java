@@ -29,7 +29,6 @@ import cards.Deck;
 
 @ManagedBean(name="table")
 @ApplicationScoped
-@ServerEndpoint("/echo")
 public class Table implements Owner, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -46,31 +45,6 @@ public class Table implements Owner, Serializable {
 
 	@Inject
 	private Scoring scoring;
-
-    private List<Session> sessions = new ArrayList<>();
-
-
-    @OnOpen
-    public void onOpen(Session session) {
-        System.out.println("onOpen: " + session.getId());
-        sessions.add(session);
-        System.out.println("onOpen: Notification list size: " + sessions.size());
-
-        try{
-            session.getBasicRemote().sendText("Hello user!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @OnMessage
-    public void messageReceiver(String message) {
-        System.out.println("Received message:" + message);
-    }
-
-
-
-
 
 
     public Deck getDeck() {
