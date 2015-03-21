@@ -51,3 +51,6 @@ jmeter.log
 # Idea
 .idea/
 poker.iml
+
+
+.classpath
