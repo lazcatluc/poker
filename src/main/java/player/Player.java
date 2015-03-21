@@ -11,4 +11,10 @@ public interface Player {
 	public String getName();
 
     List<Card> getHand();
+    
+    void increaseAmount(int amount);
+
+	void decreaseAmount(int amountInt);
+	
+	Integer getMoney();
 }

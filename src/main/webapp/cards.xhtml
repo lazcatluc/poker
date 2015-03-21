@@ -49,9 +49,12 @@
 			<h:inputText value="#{player.amount}"></h:inputText>
 			<h:commandButton value="Bet" action="#{player.bet}" />
 			<h:commandButton value="Fold" action="#{player.fold}" />
+			<h:commandButton value="End game" action="#{table.endGame}" />
 		</h:form>
 		
 		Pot: #{table.pot}
+		<br />
+		Money: #{player.money}
 
 	</h:body>
 </ui:composition>

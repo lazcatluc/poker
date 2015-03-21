@@ -17,7 +17,6 @@ import betting.Bet;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidator;
-import player.PlayerValidatorImpl;
 import scoring.Scoring;
 import cards.Deck;
 
@@ -104,6 +103,19 @@ public class Table implements Owner, Serializable {
 
 	public boolean isWinner(Player player) {
 		return scoring.getResult(players).isWinner(player);
+	}
+
+	@Override
+	public Game endGame() {
+		List<Player> winners = new ArrayList<>();
+		for(Player player : players)
+			if(isWinner(player))
+				winners.add(player);
+		
+		for(Player winner : winners)
+			winner.increaseAmount(getPot()/winners.size());
+		
+		return Game.FINISHED;
 	}
 	
 }
