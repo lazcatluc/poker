@@ -3,8 +3,6 @@ package controller;
 import game.Game;
 import game.Owner;
 
-import java.awt.*;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,10 +12,6 @@ import java.util.Map;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 
 import betting.Bet;
 import player.InvalidPlayerException;
@@ -45,9 +39,8 @@ public class Table implements Owner, Serializable {
 
 	@Inject
 	private Scoring scoring;
-
-
-    public Deck getDeck() {
+	
+	public Deck getDeck() {
 		return deck;
 	}
 	
@@ -72,7 +65,7 @@ public class Table implements Owner, Serializable {
 	}
 
 	public boolean isOwner(Player player) {
-        return player.equals(owner);
+		return player.equals(owner);
 	}
 
 	@Override

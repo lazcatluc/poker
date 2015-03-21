@@ -6,40 +6,7 @@
     <h:head>
         <title>#{msg.title}</title>
         <link rel="stylesheet" href="css/cards.css" />
-
-        <script type="text/javascript">
-
-
-            var host = "ws://"+window.location.host+"/poker/echo";
-            var wsocket = new WebSocket(host);
-            waitForSocketConnection(wsocket, function() {
-                wsocket.send("teeeeeeeeeest");
-            });
-
-            function onMessageReceived(evt) {
-                console.log(evt)
-                alert(evt.data);
-            }
-
-            wsocket.onmessage = onMessageReceived;
-
-            function waitForSocketConnection(socket, callback){
-                setTimeout(
-                    function(){
-                        if (socket.readyState === 1) {
-                            if(callback !== undefined){
-                                callback();
-                            }
-                            return;
-                        } else {
-                            waitForSocketConnection(socket,callback);
-                        }
-                    }, 5);
-            };
-        </script>
     </h:head>
-
-
     <h:body>
 
         Name: #{player.name}

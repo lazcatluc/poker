@@ -1,16 +1,11 @@
 package controller;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 
 
 import betting.Bet;
@@ -25,7 +20,6 @@ import cards.Deck;
 
 @ManagedBean(name = "player")
 @SessionScoped
-@ServerEndpoint("/echo")
 public class PlayerController implements Serializable{
 
 	private static final long serialVersionUID = 1L;
@@ -40,40 +34,16 @@ public class PlayerController implements Serializable{
     
 
 	private String error;
-
-    private Session session;
-
-    public PlayerController() {
-        System.out.println("Created a new PlayerController");
-    }
-
-    public String getError() {
+    
+	public String getError() {
 		return error;
 	}
-
-    @OnOpen
-    public void onOpen(Session session) {
-        System.out.println("onOpen: " + session.getId());
-        this.session = session;
-
-        try{
-            session.getBasicRemote().sendText("Hello " + player.getName());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @OnMessage
-    public void messageReceiver(String message) {
-        System.out.println("Received message:" + message);
-    }
 	
 	
 
     public String createPlayer() {
         if (player == null) {
             player = new PlayerImpl(getName());
-            System.out.println("Created player " + player.getName());
             try {
 				table.registerPlayer(player);
 			} catch (InvalidPlayerException e) {
