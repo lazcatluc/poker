@@ -5,8 +5,30 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:head>
         <title>#{msg.title}</title>
+        <link rel="stylesheet" href="https://rawgit.com/donpark/scalable-css-playing-cards/master/dist/playingcards.css" />
     </h:head>
     <h:body>
         <h:outputText value="#{msg.welcomeMessage}" />
+
+        <div id="cards" style="font-size: 5px">
+            <div class="card" id="view53">
+                <div class="card-ace club">
+                    <div class="corner top">
+                        <span class="number">A</span>
+                        <span>♣</span>
+                    </div>
+                    <span class="suit middle_center">♣</span>
+                    <div class="corner bottom">
+                        <span class="number">A</span>
+                        <span>♣</span>
+                    </div>
+                </div>
+            </div>
+
+            <ui:include src="/templates/card-back.xhtml" />
+
+            <ui:include src="/templates/card-two.xhtml" />
+
+        </div>
     </h:body>
 </ui:composition>
