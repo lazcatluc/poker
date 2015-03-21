@@ -15,7 +15,7 @@ import cards.Deck;
 import cards.Rank;
 import cards.Suit;
 
-public class CardControllerTest {
+public class CardControllerTests {
 
 	private Deck deck;
 	
