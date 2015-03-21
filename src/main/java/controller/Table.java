@@ -3,6 +3,7 @@ package controller;
 import game.Game;
 import game.Owner;
 
+import java.awt.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,10 @@ import java.util.Map;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
 
 import betting.Bet;
 import player.InvalidPlayerException;
@@ -23,6 +28,7 @@ import cards.Deck;
 
 @ManagedBean(name="table")
 @ApplicationScoped
+@ServerEndpoint("/echo")
 public class Table implements Owner, Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -39,8 +45,24 @@ public class Table implements Owner, Serializable {
 
 	@Inject
 	private Scoring scoring;
-	
-	public Deck getDeck() {
+
+    private List<Session> sessions = new ArrayList<>();
+
+
+    @OnOpen
+    public void onOpen(Session session) {
+        System.out.println("onOpen: " + session.getId());
+        sessions.add(session);
+        System.out.println("onOpen: Notification list size: " + sessions.size());
+    }
+
+    @OnMessage
+    public void messageReceiver(String message) {
+        System.out.println("Received message:" + message);
+    }
+
+
+    public Deck getDeck() {
 		return deck;
 	}
 	
@@ -65,7 +87,7 @@ public class Table implements Owner, Serializable {
 	}
 
 	public boolean isOwner(Player player) {
-		return player.equals(owner);
+        return player.equals(owner);
 	}
 
 	@Override
