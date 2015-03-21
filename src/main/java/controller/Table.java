@@ -1,34 +1,31 @@
 package controller;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 
-import cards.Card;
+import player.Player;
 import cards.Deck;
 
-@ManagedBean(name="cards")
-@SessionScoped
-public class CardController {
-	
+@ManagedBean(name="table")
+@ApplicationScoped
+public class Table implements Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	@Inject
 	private Deck deck;
-
+	
 	public Deck getDeck() {
 		return deck;
 	}
-
+	
 	public void setDeck(Deck deck) {
 		this.deck = deck;
 	}
 	
-	public List<Card> getPlayerCards(){
-		List<Card> cards = new ArrayList<>();
-		cards.add(deck.drawCard());
-		cards.add(deck.drawCard());
-		return cards;
-	}
 }

@@ -1,8 +1,10 @@
 package cards;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class DeckImpl implements Deck {
+public class DeckImpl implements Deck, Serializable {
+    private static final long serialVersionUID = 1900982426744622247L;
     private List<Card> cards;
     private int drawn = 0;
 
@@ -13,12 +15,12 @@ public class DeckImpl implements Deck {
                 cards.add(new CardImpl(rank, suit));
             }
         }
+        Collections.shuffle(cards);
     }
 
     @Override
     public Card drawCard() {
-        Collections.shuffle(cards);
-        if (drawn == 51) {
+        if (drawn == 52) {
             return null;
         }
         return cards.get(drawn++);
