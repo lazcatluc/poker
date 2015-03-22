@@ -19,6 +19,10 @@ public class GameImpl implements Game, Serializable {
 	public synchronized Player getPlayerOnTurn() {
 		return players.get(turn);
 	}
+	
+	public boolean isPlayerTurn(Player player) {
+		return player.equals(getPlayerOnTurn());
+	}
 
 	@Override
 	public synchronized void updateTurn() {

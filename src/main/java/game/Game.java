@@ -9,6 +9,10 @@ public interface Game {
 		public Player getPlayerOnTurn() {
 			return Player.NOBODY;
 		}
+		
+		public boolean isPlayerTurn(Player player) {
+			return false;
+		}
 
 		@Override
 		public void updateTurn() {			
@@ -20,6 +24,7 @@ public interface Game {
 	};
 	
 	Player getPlayerOnTurn();
+	boolean isPlayerTurn(Player player);
 	void removePlayer(Player player);
 	void updateTurn();
 }
