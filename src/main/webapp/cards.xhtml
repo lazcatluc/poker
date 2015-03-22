@@ -9,7 +9,8 @@
     </h:head>
     <h:body>
 
-        Name: #{player.name}
+        <h:outputText value="#{msg.name}" />
+		<h:outputText value="#{player.name}" />
 
         <ui:repeat var="card" value="#{player.cards}" varStatus="status">
 
@@ -46,16 +47,23 @@
         </ui:repeat>
 
 		<h:form>
-			<h:inputText value="#{player.amount}"></h:inputText>
-			<h:commandButton value="Bet" action="#{player.bet}" />
-			<h:commandButton value="Fold" action="#{player.fold}" />
-			<h:commandButton value="End game" action="#{table.endGame}" />
+			<h:panelGroup rendered="#{player.myTurn and table.gameStarted}">
+				<h:inputText value="#{player.amount}"></h:inputText>
+				<h:commandButton value="Bet" action="#{player.bet}" />
+				<h:commandButton value="Fold" action="#{player.fold}" />
+			</h:panelGroup>
+			<h:commandButton value="#{msg.startGame}" 
+				action="#{table.startGame}" rendered="${player.owner and (not table.gameStarted)}"/>
+			<h:commandButton value="#{msg.endGame}" 
+				action="#{table.endGame}" rendered="${player.owner and table.gameStarted}"/>
 		</h:form>
 		
-		Pot: #{table.pot}
+		<h:outputText value="#{msg.pot}" />
+		<h:outputText value="#{table.pot}" />
 
 		<br />
-		Money: #{player.money}
+		<h:outputText value="#{msg.money}" />
+		<h:outputText value="#{player.money}" />
 
 
 		<div class="winner">

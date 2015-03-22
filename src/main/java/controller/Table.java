@@ -1,7 +1,10 @@
 package controller;
 
 import game.Game;
+import game.GameAlreadyInProgressException;
+import game.GameBuilder;
 import game.Owner;
+import game.PlayerActionOutOfTurnException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +28,7 @@ import cards.Deck;
 @ApplicationScoped
 public class Table implements Owner, Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
 	private Player owner;
 	private List<Player> players = new ArrayList<>();
@@ -41,6 +44,10 @@ public class Table implements Owner, Serializable {
 	@Inject
 	private Scoring scoring;
 	
+	@Inject
+	private GameBuilder gameBuilder;
+	private Game game = Game.FINISHED;
+	
 	public Deck getDeck() {
 		return deck;
 	}
@@ -49,7 +56,10 @@ public class Table implements Owner, Serializable {
 		this.deck = deck;
 	}
 	
-	public void registerPlayer(Player player) throws InvalidPlayerException {
+	public void registerPlayer(Player player) throws InvalidPlayerException, GameAlreadyInProgressException {
+		if (isGameStarted()) {
+			throw new GameAlreadyInProgressException();
+		}
 		if (players.isEmpty()) {
 			owner = player;
 		}
@@ -59,7 +69,9 @@ public class Table implements Owner, Serializable {
 		players.add(player);
 	}
 	
-	
+	public boolean isGameStarted() {
+		return !Game.FINISHED.equals(game);
+	}
 	
 	public void setValidator(PlayerValidator validator) {
 		this.validator = validator;
@@ -70,16 +82,19 @@ public class Table implements Owner, Serializable {
 	}
 
 	@Override
-	public Game startGame() {
-		return Game.FINISHED;
+	public synchronized Game startGame() {
+		setGame(getGameBuilder().withPlayers(players).build());
+		return getGame();
 	}
 
 	public int getNumberOfPlayers() {
 		return players.size();
 	}
 
-	public void fold(Player player) {
+	public synchronized void fold(Player player) {
 		players.remove(player);
+		game.removePlayer(player);
+		validator.removePlayerName(player.getName());
 		if(players.isEmpty()){
 			owner = null;
 		}else{
@@ -88,13 +103,21 @@ public class Table implements Owner, Serializable {
 	}
 
 	public void takeBet(String name, Bet bet) {
+		validatePlayerTurn(name);
         List<Bet> playerBets = bets.getOrDefault(name, new ArrayList<Bet>());
         playerBets.add(bet);
 		bets.put(name, playerBets);
 
         pot += bet.getAmount();
+        game.updateTurn();
 	}
 	
+	private void validatePlayerTurn(String name) throws PlayerActionOutOfTurnException {
+		if (!game.getPlayerOnTurn().getName().equals(name)) {
+			throw new PlayerActionOutOfTurnException();
+		}
+	}
+
 	public Integer getPot(){
 		return pot;
 	}
@@ -107,6 +130,23 @@ public class Table implements Owner, Serializable {
 		return scoring.getResult(players).isWinner(player);
 	}
 
+
+	public GameBuilder getGameBuilder() {
+		return gameBuilder;
+	}
+
+	public void setGameBuilder(GameBuilder gameBuilder) {
+		this.gameBuilder = gameBuilder;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
 	@Override
 	public Game endGame() {
 		List<Player> winners = new ArrayList<>();
@@ -116,8 +156,9 @@ public class Table implements Owner, Serializable {
 		
 		for(Player winner : winners)
 			winner.increaseAmount(getPot()/winners.size());
-		
-		return Game.FINISHED;
+		pot = getPot() % winners.size();
+		game = Game.FINISHED;
+		return game;
 	}
 	
 }

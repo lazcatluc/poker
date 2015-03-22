@@ -1,5 +1,7 @@
 package converters;
 
+import java.io.Serializable;
+
 import cards.Rank;
 import cards.Suit;
 
@@ -12,9 +14,11 @@ import javax.faces.convert.FacesConverter;
  * Created by pndl on 3/21/15.
  */
 @FacesConverter("converters.RankToHtmlSymbol")
-public class RankToHtmlSymbol implements Converter {
+public class RankToHtmlSymbol implements Converter, Serializable {
 
-    @Override
+	private static final long serialVersionUID = 1L;
+
+	@Override
     public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
         return null;
     }
