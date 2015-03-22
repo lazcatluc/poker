@@ -126,6 +126,9 @@ public class PlayerController implements Serializable {
 		if (isMyTurn() || (isOwner() && !table.isGameStarted())) {
 			return "@none";
 		}
+		if (!table.isGameStarted()) {
+			return ":gameData :cards";
+		}
 		return ":gameData";
 	}
 	
