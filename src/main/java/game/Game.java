@@ -5,10 +5,6 @@ import player.Player;
 public interface Game {
 
 	Game FINISHED = new Game() {
-		@Override
-		public Player getPlayerOnTurn() {
-			return Player.NOBODY;
-		}
 		
 		public boolean isPlayerTurn(Player player) {
 			return false;
@@ -23,7 +19,6 @@ public interface Game {
 		}
 	};
 	
-	Player getPlayerOnTurn();
 	boolean isPlayerTurn(Player player);
 	void removePlayer(Player player);
 	void updateTurn();

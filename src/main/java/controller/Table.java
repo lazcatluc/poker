@@ -1,27 +1,26 @@
 package controller;
 
+import game.Bets;
 import game.Game;
 import game.GameAlreadyInProgressException;
 import game.GameBuilder;
 import game.Owner;
 import game.PlayerActionOutOfTurnException;
+import game.PlayerIsNotAllowedToBetAmount;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 
-import betting.Bet;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidator;
-import player.PlayerValidatorImpl;
 import scoring.Scoring;
+import betting.Bet;
 import cards.Deck;
 
 @ManagedBean(name="table")
@@ -32,8 +31,6 @@ public class Table implements Owner, Serializable {
 
 	private Player owner;
 	private List<Player> players = new ArrayList<>();
-	private Map<String, List<Bet>> bets = new HashMap<>();
-    private int pot = 0;
 	
 	@Inject
 	private PlayerValidator validator; 
@@ -43,6 +40,9 @@ public class Table implements Owner, Serializable {
 
 	@Inject
 	private Scoring scoring;
+	
+	@Inject 
+	private Bets bets;
 	
 	@Inject
 	private GameBuilder gameBuilder;
@@ -102,24 +102,26 @@ public class Table implements Owner, Serializable {
 		}
 	}
 
-	public void takeBet(String name, Bet bet) {
-		validatePlayerTurn(name);
-        List<Bet> playerBets = bets.getOrDefault(name, new ArrayList<Bet>());
-        playerBets.add(bet);
-		bets.put(name, playerBets);
-
-        pot += bet.getAmount();
+	public void takeBet(Player player, Bet bet) throws PlayerIsNotAllowedToBetAmount {
+		validatePlayerTurn(player);
+		bets.takeBet(player, bet);
         game.updateTurn();
 	}
 	
-	private void validatePlayerTurn(String name) throws PlayerActionOutOfTurnException {
-		if (!game.getPlayerOnTurn().getName().equals(name)) {
+	public void check(Player player) throws PlayerIsNotAllowedToBetAmount {
+		validatePlayerTurn(player);
+		bets.check(player);
+		game.updateTurn();
+	}
+	
+	private void validatePlayerTurn(Player player) throws PlayerActionOutOfTurnException {
+		if (!game.isPlayerTurn(player)) {
 			throw new PlayerActionOutOfTurnException();
 		}
 	}
 
-	public Integer getPot(){
-		return pot;
+	public int getPot(){
+		return bets.getPot();
 	}
 
 	public void setScoring(Scoring scoring) {
@@ -156,9 +158,13 @@ public class Table implements Owner, Serializable {
 		
 		for(Player winner : winners)
 			winner.increaseAmount(getPot()/winners.size());
-		pot = getPot() % winners.size();
+		bets.resetPot(getPot() % winners.size());
 		game = Game.FINISHED;
 		return game;
+	}
+
+	public void setBets(Bets bets) {
+		this.bets = bets;
 	}
 	
 }

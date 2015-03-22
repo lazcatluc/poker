@@ -1,33 +1,30 @@
 package controller;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-import game.Game;
-import game.GameBuilder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import game.Bets;
 import game.GameBuilderImpl;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
+import player.Player;
+import player.PlayerValidatorImpl;
+import scoring.TwoCardsScoring;
 import cards.Card;
 import cards.CardImpl;
 import cards.Deck;
 import cards.Rank;
 import cards.Suit;
-import player.InvalidPlayerException;
-import player.Player;
-import player.PlayerValidatorImpl;
-import scoring.Scoring;
-import scoring.TwoCardsScoring;
 
 public class PlayerControllerTest {
 
@@ -39,7 +36,6 @@ public class PlayerControllerTest {
 	private Card card2;
 
 	private Table table;
-	private Game game;
 
 	@Before
 	public void setup() {
@@ -55,6 +51,7 @@ public class PlayerControllerTest {
 		table.setValidator(new PlayerValidatorImpl());
 		table.setDeck(deck);
 		table.setGameBuilder(new GameBuilderImpl());
+		table.setBets(new Bets());
 		playerController.setTable(table);
 
 		playerController.setName("testName");
@@ -166,7 +163,7 @@ public class PlayerControllerTest {
 		playerController2.setAmount("20");
 		playerController2.bet();
 		
-		assertEquals(30, table.getPot().intValue());
+		assertEquals(30, table.getPot());
 		
 	}
 	
