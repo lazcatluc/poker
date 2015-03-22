@@ -24,4 +24,9 @@ public class PlayerValidatorImpl implements PlayerValidator {
 		return nameList;
 	}
 
+	@Override
+	public void removePlayerName(String playerName) {
+		nameList.remove(playerName);
+	}
+
 }

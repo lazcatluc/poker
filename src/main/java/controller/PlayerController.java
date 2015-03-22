@@ -1,5 +1,7 @@
 package controller;
 
+import game.GameAlreadyInProgressException;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -40,8 +42,6 @@ public class PlayerController implements Serializable {
 		return player.getMoney();
 	}
 	
-	
-
     public String createPlayer() {
         if (player == null) {
             player = new PlayerImpl(getName());
@@ -50,9 +50,16 @@ public class PlayerController implements Serializable {
 			} catch (InvalidPlayerException e) {
 				error = "Name already taken";
 				return "index";
+			} catch (GameAlreadyInProgressException e) {
+				error = "Sorry, a game is already in progress";
+				return "index";
 			}
         }
         return "cards";
+    }
+    
+    public boolean isMyTurn() {
+    	return player.equals(table.getGame().getPlayerOnTurn());
     }
     
     public String getName() {
@@ -109,6 +116,10 @@ public class PlayerController implements Serializable {
 	
 	public boolean isWinner() {
 		return table.isWinner(player);
+	}
+	
+	public boolean isOwner() {
+		return table.isOwner(player);
 	}
 	
 }

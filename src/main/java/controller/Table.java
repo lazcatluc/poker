@@ -1,6 +1,7 @@
 package controller;
 
 import game.Game;
+import game.GameAlreadyInProgressException;
 import game.GameBuilder;
 import game.Owner;
 import game.PlayerActionOutOfTurnException;
@@ -55,7 +56,10 @@ public class Table implements Owner, Serializable {
 		this.deck = deck;
 	}
 	
-	public void registerPlayer(Player player) throws InvalidPlayerException {
+	public void registerPlayer(Player player) throws InvalidPlayerException, GameAlreadyInProgressException {
+		if (isGameStarted()) {
+			throw new GameAlreadyInProgressException();
+		}
 		if (players.isEmpty()) {
 			owner = player;
 		}
@@ -65,7 +69,9 @@ public class Table implements Owner, Serializable {
 		players.add(player);
 	}
 	
-	
+	public boolean isGameStarted() {
+		return !Game.FINISHED.equals(game);
+	}
 	
 	public void setValidator(PlayerValidator validator) {
 		this.validator = validator;
@@ -88,6 +94,7 @@ public class Table implements Owner, Serializable {
 	public synchronized void fold(Player player) {
 		players.remove(player);
 		game.removePlayer(player);
+		validator.removePlayerName(player.getName());
 		if(players.isEmpty()){
 			owner = null;
 		}else{

@@ -4,6 +4,7 @@ package controller;
 import java.util.Collection;
 
 import game.Game;
+import game.GameAlreadyInProgressException;
 import game.GameBuilder;
 import game.GameBuilderImpl;
 import player.InvalidPlayerException;
@@ -82,6 +83,23 @@ public class TableTest {
 		table.fold(first);
 	
 		assertEquals(second, game.getPlayerOnTurn());
+	}
+	
+	@Test
+	public void whenPlayerFoldsPlayerCanGetBackIn() throws Exception {
+		table.registerPlayer(first);
+		table.registerPlayer(second);
+		
+		table.fold(second);
+		
+		table.registerPlayer(second);
+	}
+	
+	@Test(expected = GameAlreadyInProgressException.class)
+	public void whenGameStartedPlayerCannotRegisterAnymore() throws Exception {
+		table.registerPlayer(first);
+		table.startGame();
+		table.registerPlayer(second);
 	}
 	
 	@Test
