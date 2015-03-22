@@ -48,25 +48,28 @@ public class HandData implements Comparable<HandData> {
 		this.rank2 = rank2;
 	}
 	
-	private int getSign(int x) {
+	protected int getSign(int x) {
 		if(x==0) return 0;
 		else return x>0 ? 1 : -1;
 	}
 
-
+	// TODO : temporary fix, remove it
+	public int compareTypes(HandData o) {
+		return getSign(this.htype.compareTo(o.htype));
+	}
+	
 	@Override
 	public int compareTo(HandData o) {
 		
 		// Different hand type
-		int result = htype.compareTo(o.htype);
-		if(result!=0) return getSign(result);
+		int result = getSign(htype.compareTo(o.htype)); 
+		if(result!=0) return result;
 		
 		// Equal hand types
 		switch (htype) {
 		case NOTHING:
 			return 0;
 		case ONE_PAIR:
-			return getSign(rank1.compareTo(o.rank1));
 		case TWO_PAIRS:
 			if(rank1!=null && rank1!=o.rank1)
 				return getSign(rank1.compareTo(o.rank1));
@@ -80,6 +83,7 @@ public class HandData implements Comparable<HandData> {
 						return 0;
 			break;
 		case THREE_OF_A_KIND:
+			
 			break;
 		case STRAIGHT:
 			break;
