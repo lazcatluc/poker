@@ -7,13 +7,17 @@ import org.junit.Test;
 public class HandDataTest {
 
 	@Test
-	public void testCompareOnePair() {
-		HandData h1 = new HandData(HandType.ONE_PAIR);
-		h1.setRank1(Rank.NINE);
-		HandData h2 = new HandData(HandType.ONE_PAIR);
-		h2.setRank1(Rank.ACE);
-		
+	public void testCompareOnePairDiff() throws Exception {
+		HandOnePair h1 = new HandOnePair(Rank.NINE, new Rank[] {Rank.ACE, Rank.SEVEN, Rank.TWO} );
+		HandOnePair h2 = new HandOnePair(Rank.ACE, new Rank[] {Rank.EIGHT, Rank.FOUR, Rank.THREE});
 		assertEquals(-1, h1.compareTo(h2));
+	}
+	
+	@Test
+	public void testCompareOnePairEq() throws Exception {
+		HandOnePair h1 = new HandOnePair(Rank.NINE, new Rank[] {Rank.ACE, Rank.SEVEN, Rank.TWO} );
+		HandOnePair h2 = new HandOnePair(Rank.NINE, new Rank[] {Rank.EIGHT, Rank.FOUR, Rank.THREE});
+		assertEquals(1, h1.compareTo(h2));
 	}
 	
 	@Test

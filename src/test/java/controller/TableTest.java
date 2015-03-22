@@ -132,7 +132,6 @@ public class TableTest {
 		table.takeBet(second, evenBet);
 		when(result.isWinner(any(Player.class))).thenReturn(true);
 		table.endGame();
-		
 		assertEquals(1, table.getPot());
 	}
 
