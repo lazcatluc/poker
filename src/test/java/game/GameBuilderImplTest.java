@@ -1,12 +1,13 @@
 package game;
 
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+
 import java.util.Arrays;
 
 import org.junit.Test;
 
 import player.Player;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class GameBuilderImplTest {
 	
@@ -15,7 +16,7 @@ public class GameBuilderImplTest {
 		Player firstPlayer = mock(Player.class);
 		Player secondPlayer = mock(Player.class);
 		
-		assertEquals(firstPlayer, buildGame(firstPlayer, secondPlayer).getPlayerOnTurn());
+		assertTrue(buildGame(firstPlayer, secondPlayer).isPlayerTurn(firstPlayer));
 	}
 	
 	@Test
@@ -26,7 +27,7 @@ public class GameBuilderImplTest {
 		Game game = buildGame(firstPlayer,secondPlayer);
 		game.updateTurn();
 		
-		assertEquals(secondPlayer, game.getPlayerOnTurn());
+		assertTrue(game.isPlayerTurn(secondPlayer));
 	}
 	
 	@Test
@@ -38,7 +39,7 @@ public class GameBuilderImplTest {
 		game.updateTurn();
 		game.updateTurn();
 		
-		assertEquals(firstPlayer, game.getPlayerOnTurn());
+		assertTrue(game.isPlayerTurn(firstPlayer));
 	}
 	
 	@Test
@@ -49,7 +50,7 @@ public class GameBuilderImplTest {
 		Game game = buildGame(firstPlayer,secondPlayer);		
 		game.removePlayer(secondPlayer);
 		
-		assertEquals(firstPlayer, game.getPlayerOnTurn());
+		assertTrue(game.isPlayerTurn(firstPlayer));
 	}
 	
 	@Test
@@ -62,7 +63,7 @@ public class GameBuilderImplTest {
 		game.updateTurn();
 		game.removePlayer(secondPlayer);
 		
-		assertEquals(thirdPlayer, game.getPlayerOnTurn());
+		assertTrue(game.isPlayerTurn(thirdPlayer));
 	}
 	
 	@Test
@@ -76,7 +77,7 @@ public class GameBuilderImplTest {
 		game.updateTurn();
 		game.removePlayer(thirdPlayer);
 		
-		assertEquals(firstPlayer, game.getPlayerOnTurn());
+		assertTrue(game.isPlayerTurn(firstPlayer));
 	}
 	
 	private Game buildGame(Player... players) {

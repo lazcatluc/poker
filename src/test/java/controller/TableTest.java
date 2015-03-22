@@ -1,29 +1,33 @@
 package controller;
 
 
-import java.util.Collection;
-import java.util.List;
-
-import cards.Card;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import game.Bets;
 import game.Game;
 import game.GameAlreadyInProgressException;
-import game.GameBuilder;
 import game.GameBuilderImpl;
+import game.PlayerIsNotAllowedToBetAmount;
+
+import java.util.Collection;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerImpl;
 import player.PlayerValidatorImpl;
 import scoring.Result;
 import scoring.Scoring;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
 import betting.Bet;
 import de.bechte.junit.runners.context.HierarchicalContextRunner;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(HierarchicalContextRunner.class)
 public class TableTest {
@@ -39,6 +43,7 @@ public class TableTest {
 		table = new Table();
 		table.setValidator(new PlayerValidatorImpl());
 		table.setGameBuilder(new GameBuilderImpl());
+		table.setBets(new Bets());
 		Scoring scoring = mock(Scoring.class);
 		table.setScoring(scoring);
 		result = mock(Result.class);
@@ -84,7 +89,7 @@ public class TableTest {
 		game = table.startGame();
 		table.fold(first);
 	
-		assertEquals(second, game.getPlayerOnTurn());
+		assertTrue(game.isPlayerTurn(second));
 	}
 	
 	@Test
@@ -108,26 +113,53 @@ public class TableTest {
 	public void afterRegistrationAndGameStartFirstPlayerCanBet() throws Exception {
 		table.registerPlayer(first);
 		game = table.startGame();
-		
-		table.takeBet(first.getName(), mock(Bet.class));
+		boolean succes = true;
+
+		table.takeBet(first, mock(Bet.class));
+		assertTrue(succes);
 	}
 	
+		
 	@Test
 	public void whenGameEndsWithTwoWinnersAndOddPotKeep1InPot() throws Exception {
 		table.registerPlayer(first);
 		table.registerPlayer(second);
 		game = table.startGame();
 		
-		Bet oddBet = mock(Bet.class);
-		when(oddBet.getAmount()).thenReturn(3);
-		table.takeBet(first.getName(), oddBet);
-		Bet evenBet = mock(Bet.class);
-		when(evenBet.getAmount()).thenReturn(2);
-		table.takeBet(second.getName(), evenBet);
+		Bet oddBet = makeBet(3);
+		table.takeBet(first, oddBet);
+		Bet evenBet = makeBet(4);
+		table.takeBet(second, evenBet);
 		when(result.isWinner(any(Player.class))).thenReturn(true);
 		table.endGame();
+		assertEquals(1, table.getPot());
+	}
 
-		assertEquals(1, table.getPot().intValue());
+	private static Bet makeBet(int amount) {
+		Bet bet = mock(Bet.class);
+		when(bet.getAmount()).thenReturn(amount);
+		return bet;
+	}
+	
+	@Test
+	public void whenGameStartsAfterFirstPlayerChecksNextPlayerCanCheck() throws Exception {
+		table.registerPlayer(first);
+		table.registerPlayer(second);
+		game = table.startGame();
+
+		table.check(first);
+		table.check(second);
+		assertThat(table.getPot()).isZero();
+	}
+
+	@Test(expected=PlayerIsNotAllowedToBetAmount.class)
+	public void whenGameStartsAfterFirstBetsNextPlayerCantCheck() throws Exception {
+		table.registerPlayer(first);
+		table.registerPlayer(second);
+		game = table.startGame();
+
+		table.takeBet(first, makeBet(2));
+		table.check(second);
 	}
 	
 	public class TableWithOnePlayer{

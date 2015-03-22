@@ -1,6 +1,7 @@
 package controller;
 
 import game.GameAlreadyInProgressException;
+import game.PlayerIsNotAllowedToBetAmount;
 
 import java.io.Serializable;
 import java.util.List;
@@ -30,12 +31,15 @@ public class PlayerController implements Serializable {
     private String amount;
 
     private Player player;
-    
 
 	private String error;
     
 	public String getError() {
-		return error;
+		try {
+			return error;
+		} finally {
+			error = null;
+		}
 	}
 	
 	public Integer getMoney(){
@@ -59,7 +63,7 @@ public class PlayerController implements Serializable {
     }
     
     public boolean isMyTurn() {
-    	return player.equals(table.getGame().getPlayerOnTurn());
+    	return table.getGame().isPlayerTurn(player);
     }
     
     public String getName() {
@@ -103,10 +107,26 @@ public class PlayerController implements Serializable {
     public void bet(){
 		int amountInt = Integer.parseInt(amount);
 		Bet bet = new BetImpl(amountInt);
-		player.decreaseAmount(amountInt);
-		table.takeBet(player.getName(),bet);
+		try {
+			table.takeBet(player, bet);
+			player.decreaseAmount(amountInt);
+		} catch (PlayerIsNotAllowedToBetAmount e) {
+			setError(e.getMessage());
+		}
 	}
     
+    public void check(){
+		try {
+			table.check(player);
+		} catch (PlayerIsNotAllowedToBetAmount e) {
+			setError(e.getMessage());
+		}
+	}
+    
+	private void setError(String message) {
+		this.error = message;
+	}
+
 	public String fold() {
 		table.fold(player);
 		player = null;

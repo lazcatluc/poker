@@ -49,6 +49,7 @@
 			<h:form>
 				<h:panelGroup rendered="#{player.myTurn and table.gameStarted}">
 					<h:inputText value="#{player.amount}"></h:inputText>
+					<h:commandButton value="Check" action="#{player.check}" />
 					<h:commandButton value="Bet" action="#{player.bet}" />
 					<h:commandButton value="Fold" action="#{player.fold}" />
 				</h:panelGroup>
@@ -77,14 +78,21 @@
 
 
 			</h:form>
-
-
-			<!--<div class="winner">
-                <h:outputLabel value="Winner" rendered="player.winner}"/>
-                <h:outputLabel value="Looser" rendered="not player.winner}"/>
-            </div>-->
-
+			<h:outputText value="#{msg.pot}" />
+			<h:outputText value="#{table.pot}" />
+	
+			<br />
+			<h:outputText value="#{msg.money}" />
+			<h:outputText value="#{player.money}" />
+			
+			<span style="color: red">#{player.error}</span>
+	
+			<h:panelGroup rendered="false">
+				<div class="winner">
+					<h:outputLabel value="${msg.winner}" rendered="#{player.winner}"/>
+					<h:outputLabel value="${msg.loser}" rendered="#{not player.winner}"/>
+				</div>
+			</h:panelGroup>
 		</h:panelGroup>
-
 	</h:body>
 </ui:composition>

@@ -1,29 +1,28 @@
 package controller;
 
-import cards.Flop;
+import game.Bets;
 import game.Game;
 import game.GameAlreadyInProgressException;
 import game.GameBuilder;
 import game.Owner;
 import game.PlayerActionOutOfTurnException;
+import game.PlayerIsNotAllowedToBetAmount;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import javax.inject.Inject;
 
-import betting.Bet;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidator;
-import player.PlayerValidatorImpl;
 import scoring.Scoring;
+import betting.Bet;
 import cards.Deck;
+import cards.Flop;
 
 @ManagedBean(name = "table")
 @ApplicationScoped
@@ -33,32 +32,33 @@ public class Table implements Owner, Serializable {
 
     private Player owner;
     private List<Player> players = new ArrayList<>();
-    private Map<String, List<Bet>> bets = new HashMap<>();
-    private int pot = 0;
-
+    
     @Inject
-    private PlayerValidator validator;
-
+    private PlayerValidator validator; 
+    
     @Inject
     private Deck deck;
 
     @Inject
     private Scoring scoring;
-
+    
+    @Inject 
+    private Bets bets;
+    
     @Inject
     private GameBuilder gameBuilder;
     private Game game = Game.FINISHED;
 
     private Flop flop = Flop.EMPTY;
-
+    
     public Deck getDeck() {
         return deck;
     }
-
+    
     public void setDeck(Deck deck) {
         this.deck = deck;
     }
-
+    
     public void registerPlayer(Player player) throws InvalidPlayerException, GameAlreadyInProgressException {
         if (isGameStarted()) {
             throw new GameAlreadyInProgressException();
@@ -66,16 +66,16 @@ public class Table implements Owner, Serializable {
         if (players.isEmpty()) {
             owner = player;
         }
-
+        
         validator.validatePlayer(player);
-
+        
         players.add(player);
     }
-
+    
     public boolean isGameStarted() {
         return !Game.FINISHED.equals(game);
     }
-
+    
     public void setValidator(PlayerValidator validator) {
         this.validator = validator;
     }
@@ -98,31 +98,33 @@ public class Table implements Owner, Serializable {
         players.remove(player);
         game.removePlayer(player);
         validator.removePlayerName(player.getName());
-        if (players.isEmpty()) {
+        if(players.isEmpty()){
             owner = null;
-        } else {
+        }else{
             owner = players.get(0);
         }
     }
 
-    public void takeBet(String name, Bet bet) {
-        validatePlayerTurn(name);
-        List<Bet> playerBets = bets.getOrDefault(name, new ArrayList<Bet>());
-        playerBets.add(bet);
-        bets.put(name, playerBets);
-
-        pot += bet.getAmount();
+    public void takeBet(Player player, Bet bet) throws PlayerIsNotAllowedToBetAmount {
+        validatePlayerTurn(player);
+        bets.takeBet(player, bet);
         game.updateTurn();
     }
-
-    private void validatePlayerTurn(String name) throws PlayerActionOutOfTurnException {
-        if (!game.getPlayerOnTurn().getName().equals(name)) {
+    
+    public void check(Player player) throws PlayerIsNotAllowedToBetAmount {
+        validatePlayerTurn(player);
+        bets.check(player);
+        game.updateTurn();
+    }
+    
+    private void validatePlayerTurn(Player player) throws PlayerActionOutOfTurnException {
+        if (!game.isPlayerTurn(player)) {
             throw new PlayerActionOutOfTurnException();
         }
     }
 
-    public Integer getPot() {
-        return pot;
+    public int getPot(){
+        return bets.getPot();
     }
 
     public void setScoring(Scoring scoring) {
@@ -163,13 +165,13 @@ public class Table implements Owner, Serializable {
     @Override
     public Game endGame() {
         List<Player> winners = new ArrayList<>();
-        for (Player player : players)
-            if (isWinner(player))
+        for(Player player : players)
+            if(isWinner(player))
                 winners.add(player);
-
-        for (Player winner : winners)
-            winner.increaseAmount(getPot() / winners.size());
-        pot = getPot() % winners.size();
+        
+        for(Player winner : winners)
+            winner.increaseAmount(getPot()/winners.size());
+        bets.resetPot(getPot() % winners.size());
         game = Game.FINISHED;
 
         players.forEach((player) -> {
@@ -178,5 +180,8 @@ public class Table implements Owner, Serializable {
         return game;
     }
 
-
+    public void setBets(Bets bets) {
+        this.bets = bets;
+    }
+    
 }

@@ -1,34 +1,34 @@
 package controller;
 
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.*;
-import game.Game;
-import game.GameBuilder;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import game.Bets;
 import game.GameBuilderImpl;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
-
-import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 
-import cards.Card;
-import cards.CardImpl;
-import cards.Deck;
-import cards.Rank;
-import cards.Suit;
-import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidatorImpl;
 import scoring.Result;
 import scoring.Scoring;
 import scoring.TwoCardsScoring;
+import cards.Card;
+import cards.CardImpl;
+import cards.Deck;
+import cards.Rank;
+import cards.Suit;
 
 public class PlayerControllerTest {
 
@@ -42,7 +42,6 @@ public class PlayerControllerTest {
     private Card card4;
 
 	private Table table;
-	private Game game;
 
 	@Before
 	public void setup() {
@@ -59,12 +58,13 @@ public class PlayerControllerTest {
         table.setValidator(new PlayerValidatorImpl());
         table.setDeck(deck);
         table.setGameBuilder(new GameBuilderImpl());
+        table.setBets(new Bets());
 
         Scoring scoring = mock(Scoring.class);
         table.setScoring(scoring);
         Result result = mock(Result.class);
-        when(scoring.getResult(any(Collection.class))).thenReturn(result);
-        when(result.isWinner(any(Player.class))).thenReturn(true);
+        when(scoring.getResult(Mockito.any(Collection.class))).thenReturn(result);
+        when(result.isWinner(Mockito.any(Player.class))).thenReturn(true);
 
         playerController = new PlayerController();
         playerController.setTable(table);
@@ -177,7 +177,7 @@ public class PlayerControllerTest {
 		playerController2.setAmount("20");
 		playerController2.bet();
 		
-		assertEquals(30, table.getPot().intValue());
+		assertEquals(30, table.getPot());
 		
 	}
 
@@ -198,7 +198,7 @@ public class PlayerControllerTest {
         assertEquals(hand1.size(), 0);
         assertEquals(hand2.size(), 0);
 
-        game = table.startGame();
+        table.startGame();
         hand1 = playerController.getCards();
         hand2 = playerController2.getCards();
         assertEquals(hand1.size(), 2);
