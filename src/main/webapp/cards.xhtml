@@ -74,25 +74,8 @@
                 <h:outputText value="#{msg.money}"/>
                 <h:outputText value="#{player.money}"/>
 
-                <h:panelGroup rendered="false">
-                    <div class="winner">
-                        <h:outputLabel value="${msg.winner}" rendered="#{player.winner}"/>
-                        <h:outputLabel value="${msg.loser}" rendered="#{not player.winner}"/>
-                    </div>
-                </h:panelGroup>
 
-                <h:commandButton value="#{msg.startGame}"
-                                 action="#{table.startGame}" rendered="${player.owner and (not table.gameStarted)}"/>
-                <h:commandButton value="#{msg.endGame}"
-                                 action="#{table.endGame}" rendered="${player.owner and table.gameStarted}"/>
             </h:form>
-
-            <h:outputText value="#{msg.pot}"/>
-            <h:outputText value="#{table.pot}"/>
-
-            <br/>
-            <h:outputText value="#{msg.money}"/>
-            <h:outputText value="#{player.money}"/>
 
 
             <!--<div class="winner">
