@@ -26,6 +26,7 @@ import cards.Suit;
 import player.InvalidPlayerException;
 import player.Player;
 import player.PlayerValidatorImpl;
+import scoring.Result;
 import scoring.Scoring;
 import scoring.TwoCardsScoring;
 
@@ -37,6 +38,8 @@ public class PlayerControllerTest {
 
 	private Card card1;
 	private Card card2;
+    private Card card3;
+    private Card card4;
 
 	private Table table;
 	private Game game;
@@ -47,16 +50,24 @@ public class PlayerControllerTest {
 
 		card1 = new CardImpl(Rank.ACE, Suit.CLUBS);
 		card2 = new CardImpl(Rank.FIVE, Suit.HEARTS);
-		when(deck.drawCard()).thenReturn(card1, card2);
+        card3 = new CardImpl(Rank.EIGHT, Suit.DIAMONDS);
+        card4 = new CardImpl(Rank.KING, Suit.SPADES);
+		when(deck.drawCard()).thenReturn(card1, card2, card3, card4);
 
-		playerController = new PlayerController();
 
-		table = new Table();
-		table.setValidator(new PlayerValidatorImpl());
-		table.setDeck(deck);
-		table.setGameBuilder(new GameBuilderImpl());
-		playerController.setTable(table);
+        table = new Table();
+        table.setValidator(new PlayerValidatorImpl());
+        table.setDeck(deck);
+        table.setGameBuilder(new GameBuilderImpl());
 
+        Scoring scoring = mock(Scoring.class);
+        table.setScoring(scoring);
+        Result result = mock(Result.class);
+        when(scoring.getResult(any(Collection.class))).thenReturn(result);
+        when(result.isWinner(any(Player.class))).thenReturn(true);
+
+        playerController = new PlayerController();
+        playerController.setTable(table);
 		playerController.setName("testName");
 		playerController.createPlayer();
 
@@ -169,6 +180,30 @@ public class PlayerControllerTest {
 		assertEquals(30, table.getPot().intValue());
 		
 	}
+
+    @Test
+    public void whenANewGameStartsPlayersGetNewCards() throws Exception {
+        PlayerController playerController2 = new PlayerController();
+        playerController2.setName("player2");
+        playerController2.setTable(table);
+        playerController2.createPlayer();
+        table.startGame();
+
+        List<Card> hand1 = playerController.getCards();
+        List<Card> hand2 = playerController2.getCards();
+        assertEquals(hand1.size(), 2);
+        assertEquals(hand2.size(), 2);
+
+        table.endGame();
+        assertEquals(hand1.size(), 0);
+        assertEquals(hand2.size(), 0);
+
+        game = table.startGame();
+        hand1 = playerController.getCards();
+        hand2 = playerController2.getCards();
+        assertEquals(hand1.size(), 2);
+        assertEquals(hand2.size(), 2);
+    }
 	
 	@Test
 	public void winningPlayerTakesPot() throws Exception {

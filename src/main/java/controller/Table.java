@@ -171,7 +171,12 @@ public class Table implements Owner, Serializable {
             winner.increaseAmount(getPot() / winners.size());
         pot = getPot() % winners.size();
         game = Game.FINISHED;
+
+        players.forEach((player) -> {
+            player.getHand().clear();
+        });
         return game;
     }
+
 
 }

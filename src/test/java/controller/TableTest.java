@@ -2,7 +2,9 @@ package controller;
 
 
 import java.util.Collection;
+import java.util.List;
 
+import cards.Card;
 import game.Game;
 import game.GameAlreadyInProgressException;
 import game.GameBuilder;
@@ -124,7 +126,7 @@ public class TableTest {
 		table.takeBet(second.getName(), evenBet);
 		when(result.isWinner(any(Player.class))).thenReturn(true);
 		table.endGame();
-		
+
 		assertEquals(1, table.getPot().intValue());
 	}
 	
