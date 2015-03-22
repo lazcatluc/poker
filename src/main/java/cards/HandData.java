@@ -1,9 +1,13 @@
 package cards;
 
+import java.io.Serializable;
+
 import cards.Rank;
 import cards.Suit;
 
-public class HandData implements Comparable<HandData> {
+public class HandData implements Comparable<HandData>, Serializable {
+	
+	private static final long serialVersionUID = 1L;
 
 	private HandType htype;
 

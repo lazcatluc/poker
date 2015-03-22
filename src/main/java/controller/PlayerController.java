@@ -17,7 +17,7 @@ import cards.Deck;
 
 @ManagedBean(name = "player")
 @SessionScoped
-public class PlayerController implements Serializable{
+public class PlayerController implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

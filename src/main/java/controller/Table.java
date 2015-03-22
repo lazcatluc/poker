@@ -3,6 +3,7 @@ package controller;
 import game.Game;
 import game.GameBuilder;
 import game.Owner;
+import game.PlayerActionOutOfTurnException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ import cards.Deck;
 @ApplicationScoped
 public class Table implements Owner, Serializable {
 
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 
 	private Player owner;
 	private List<Player> players = new ArrayList<>();
@@ -84,7 +85,7 @@ public class Table implements Owner, Serializable {
 		return players.size();
 	}
 
-	public void fold(Player player) {
+	public synchronized void fold(Player player) {
 		players.remove(player);
 		game.removePlayer(player);
 		if(players.isEmpty()){
@@ -95,13 +96,21 @@ public class Table implements Owner, Serializable {
 	}
 
 	public void takeBet(String name, Bet bet) {
+		validatePlayerTurn(name);
         List<Bet> playerBets = bets.getOrDefault(name, new ArrayList<Bet>());
         playerBets.add(bet);
 		bets.put(name, playerBets);
 
         pot += bet.getAmount();
+        game.updateTurn();
 	}
 	
+	private void validatePlayerTurn(String name) throws PlayerActionOutOfTurnException {
+		if (!game.getPlayerOnTurn().getName().equals(name)) {
+			throw new PlayerActionOutOfTurnException();
+		}
+	}
+
 	public Integer getPot(){
 		return pot;
 	}
@@ -140,8 +149,9 @@ public class Table implements Owner, Serializable {
 		
 		for(Player winner : winners)
 			winner.increaseAmount(getPot()/winners.size());
-		
-		return Game.FINISHED;
+		pot = getPot() % winners.size();
+		game = Game.FINISHED;
+		return game;
 	}
 	
 }
