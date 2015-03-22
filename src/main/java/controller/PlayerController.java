@@ -122,4 +122,11 @@ public class PlayerController implements Serializable {
 		return table.isOwner(player);
 	}
 	
+	public String getAjaxRenderData() {
+		if (isMyTurn() || (isOwner() && !table.isGameStarted())) {
+			return "@none";
+		}
+		return ":gameData";
+	}
+	
 }

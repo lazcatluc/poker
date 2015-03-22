@@ -5,12 +5,14 @@
                 xmlns:h="http://java.sun.com/jsf/html">
     <h:head>
         <title>#{msg.title}</title>
-        <link rel="stylesheet" href="css/cards.css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
+        <link rel="stylesheet" href="css/cards.css"/>
+        <script type="text/javascript" src="js/refresh.js"></script>
     </h:head>
     <h:body>
 
-        <h:outputText value="#{msg.name}" />
-		<h:outputText value="#{player.name}" />
+        <h:outputText value="#{msg.name}"/>
+        <h:outputText value="#{player.name}"/>
 
         <ui:repeat var="card" value="#{player.cards}" varStatus="status">
 
@@ -19,12 +21,12 @@
                     <div class="corner top">
                             <span class="number">
                                 <h:outputText value="#{card.rank}" escape="false">
-                                    <f:converter converterId="converters.RankToHtmlSymbol" />
+                                    <f:converter converterId="converters.RankToHtmlSymbol"/>
                                 </h:outputText>
                             </span>
                             <span>
                                 <h:outputText value="#{card.suit}" escape="false">
-                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
+                                    <f:converter converterId="converters.SuitToHtmlSymbol"/>
                                 </h:outputText>
                             </span>
                     </div>
@@ -32,12 +34,12 @@
                     <div class="corner bottom">
                             <span class="number">
                                 <h:outputText value="#{card.rank}" escape="false">
-                                    <f:converter converterId="converters.RankToHtmlSymbol" />
+                                    <f:converter converterId="converters.RankToHtmlSymbol"/>
                                 </h:outputText>
                             </span>
                             <span>
                                 <h:outputText value="#{card.suit}" escape="false">
-                                    <f:converter converterId="converters.SuitToHtmlSymbol" />
+                                    <f:converter converterId="converters.SuitToHtmlSymbol"/>
                                 </h:outputText>
                             </span>
                     </div>
@@ -45,31 +47,60 @@
             </div>
 
         </ui:repeat>
+        <h:panelGroup id="gameData">
+            <h:form>
+                <h:panelGroup rendered="#{player.myTurn and table.gameStarted}">
+                    <h:inputText value="#{player.amount}"></h:inputText>
+                    <h:commandButton value="Bet" action="#{player.bet}"/>
+                    <h:commandButton value="Fold" action="#{player.fold}"/>
+                </h:panelGroup>
+                <h:panelGroup id="buttons">
+                    <h:commandButton value="#{msg.startGame}" rendered="${player.owner and (not table.gameStarted)}">
+                        <f:ajax listener="#{table.startGame}" render=":gameData" onerror="fullRefresh"/>
+                    </h:commandButton>
 
-		<h:form>
-			<h:panelGroup rendered="#{player.myTurn and table.gameStarted}">
-				<h:inputText value="#{player.amount}"></h:inputText>
-				<h:commandButton value="Bet" action="#{player.bet}" />
-				<h:commandButton value="Fold" action="#{player.fold}" />
-			</h:panelGroup>
-			<h:commandButton value="#{msg.startGame}" 
-				action="#{table.startGame}" rendered="${player.owner and (not table.gameStarted)}"/>
-			<h:commandButton value="#{msg.endGame}" 
-				action="#{table.endGame}" rendered="${player.owner and table.gameStarted}"/>
-		</h:form>
-		
-		<h:outputText value="#{msg.pot}" />
-		<h:outputText value="#{table.pot}" />
+                    <h:commandButton value="#{msg.endGame}" rendered="${player.owner and table.gameStarted}"
+                                     action="#{table.endGame}"/>
 
-		<br />
-		<h:outputText value="#{msg.money}" />
-		<h:outputText value="#{player.money}" />
+                    <h:commandButton styleClass="refreshButton">
+                        <f:ajax render="${player.ajaxRenderData}" onerror="fullRefresh"/>
+                    </h:commandButton>
+                </h:panelGroup>
+
+                <h:outputText value="#{msg.pot}"/>
+                <h:outputText value="#{table.pot}"/>
+
+                <br/>
+                <h:outputText value="#{msg.money}"/>
+                <h:outputText value="#{player.money}"/>
+
+                <h:panelGroup rendered="false">
+                    <div class="winner">
+                        <h:outputLabel value="${msg.winner}" rendered="#{player.winner}"/>
+                        <h:outputLabel value="${msg.loser}" rendered="#{not player.winner}"/>
+                    </div>
+                </h:panelGroup>
+
+                <h:commandButton value="#{msg.startGame}"
+                                 action="#{table.startGame}" rendered="${player.owner and (not table.gameStarted)}"/>
+                <h:commandButton value="#{msg.endGame}"
+                                 action="#{table.endGame}" rendered="${player.owner and table.gameStarted}"/>
+            </h:form>
+
+            <h:outputText value="#{msg.pot}"/>
+            <h:outputText value="#{table.pot}"/>
+
+            <br/>
+            <h:outputText value="#{msg.money}"/>
+            <h:outputText value="#{player.money}"/>
 
 
-		<!--<div class="winner">
-			<h:outputLabel value="Winner" rendered="player.winner}"/>
-			<h:outputLabel value="Looser" rendered="not player.winner}"/>
-		</div>-->
+            <!--<div class="winner">
+                <h:outputLabel value="Winner" rendered="player.winner}"/>
+                <h:outputLabel value="Looser" rendered="not player.winner}"/>
+            </div>-->
 
-	</h:body>
+        </h:panelGroup>
+
+    </h:body>
 </ui:composition>
