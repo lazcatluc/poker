@@ -1,5 +1,6 @@
 package controller;
 
+import cards.Flop;
 import game.Game;
 import game.GameAlreadyInProgressException;
 import game.GameBuilder;
@@ -47,6 +48,8 @@ public class Table implements Owner, Serializable {
     @Inject
     private GameBuilder gameBuilder;
     private Game game = Game.FINISHED;
+
+    private Flop flop = Flop.EMPTY;
 
     public Deck getDeck() {
         return deck;
@@ -145,6 +148,16 @@ public class Table implements Owner, Serializable {
 
     public void setGame(Game game) {
         this.game = game;
+    }
+
+    public Flop getFlop() {
+        return this.flop;
+    }
+
+    public void flop() {
+        if (this.flop == Flop.EMPTY) {
+            this.flop = this.deck.dealFlop();
+        }
     }
 
     @Override

@@ -20,6 +20,6 @@ public class DeckImplTests {
         assertEquals(52, drawn.size());
         assertFalse(drawn.contains(null));
 
-        assertEquals(null, deck.drawCard());
+        assertEquals(Card.NO_CARD, deck.drawCard());
     }
 }

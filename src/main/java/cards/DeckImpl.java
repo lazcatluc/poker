@@ -21,8 +21,13 @@ public class DeckImpl implements Deck, Serializable {
     @Override
     public Card drawCard() {
         if (drawn == 52) {
-            return null;
+            return Card.NO_CARD;
         }
         return cards.get(drawn++);
+    }
+
+    @Override
+    public Flop dealFlop() {
+        return new Flop(drawCard(), drawCard(), drawCard());
     }
 }
